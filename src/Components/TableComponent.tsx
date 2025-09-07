@@ -208,53 +208,56 @@ const TableComponent: React.FC = () => {
       </div>
 
       {/* Pagination Controls */}
-      <div className="mt-6 flex justify-between items-center gap-2 text-sm text-gray-700 relative">
-        {/* Item range */}
-        <span>
-          <span className="font-semibold">
-            {(currentPage - 1) * itemsPerPage + 1}-
-            {Math.min(currentPage * itemsPerPage, sortedData.length)}
-          </span>{" "}
-          of <span className="font-semibold">{sortedData.length}</span> items
-        </span>
-
-        {/* Pagination buttons */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            className="px-3 py-1 border border-gray-300 rounded-md bg-white shadow-sm disabled:opacity-50 hover:bg-gray-50"
-          >
-            Prev
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
+      <div className="mt-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 text-sm text-gray-700 relative">
+          {/* Item range */}
+          <span className="text-center md:text-left">
+            <span className="font-semibold">
+              {(currentPage - 1) * itemsPerPage + 1}-
+              {Math.min(currentPage * itemsPerPage, sortedData.length)}
+            </span>{" "}
+            of <span className="font-semibold">{sortedData.length}</span> items
           </span>
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            className="px-3 py-1 border border-gray-300 rounded-md bg-white shadow-sm disabled:opacity-50 hover:bg-gray-50"
+
+          {/* Pagination buttons */}
+          <div className="flex items-center justify-center gap-2 order-first md:order-none">
+            {/* ⬅️ On small screens, keep inline not absolute */}
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              className="px-3 py-1 border border-gray-300 rounded-md bg-white shadow-sm disabled:opacity-50 hover:bg-gray-50 text-xs md:text-sm"
+            >
+              Prev
+            </button>
+            <span className="text-xs md:text-sm">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              className="px-3 py-1 border border-gray-300 rounded-md bg-white shadow-sm disabled:opacity-50 hover:bg-gray-50 text-xs md:text-sm"
+            >
+              Next
+            </button>
+          </div>
+
+          {/* Items per page selector */}
+          <select
+            className="border border-gray-300 p-1.5 rounded-md shadow-sm bg-white text-gray-700 self-center md:self-auto text-xs md:text-sm"
+            value={itemsPerPage}
+            onChange={(e) => {
+              setItemsPerPage(Number(e.target.value));
+              setCurrentPage(1); // reset page when page size changes
+            }}
           >
-            Next
-          </button>
+            {[5, 10, 20, 50].map((n) => (
+              <option key={n} value={n}>
+                {n} / Page
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Items per page selector */}
-        <select
-          className="ml-auto border border-gray-300 p-1.5 rounded-md shadow-sm bg-white text-gray-700"
-          value={itemsPerPage}
-          onChange={(e) => {
-            setItemsPerPage(Number(e.target.value));
-            setCurrentPage(1); // reset page when page size changes
-          }}
-        >
-          {[5, 10, 20, 50].map((n) => (
-            <option key={n} value={n}>
-              {n} / Page
-            </option>
-          ))}
-        </select>
-      </div>
+      
     </div>
   );
 };
