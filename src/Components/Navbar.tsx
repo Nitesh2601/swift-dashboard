@@ -1,4 +1,4 @@
-import React from 'react'
+
 import Logo from '../assets/SwiftLogo.svg'
 import { useNavigate } from 'react-router-dom'
 
